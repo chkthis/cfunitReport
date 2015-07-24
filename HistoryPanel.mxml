@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Panel xmlns:mx="http://www.adobe.com/2006/mxml" title="Test History">
+	
+	<mx:Metadata>
+	   [Event(name="testChanged", type="net.sourceforge.cfunitReport.models.SelectTestEvent")]
+	</mx:Metadata>
+		
+	<mx:Script>
+		<![CDATA[
+			import mx.controls.Alert;
+			import mx.rpc.http.mxml.HTTPService;
+			import flash.events.Event;
+			import net.sourceforge.cfunitReport.models.SelectTestEvent;
+			
+			[Bindable] public var logService:HTTPService;
+			
+			private function changeHandler(event:Event):void {
+				Alert.show('changeHandler_start');
+        	 	var eventObj:SelectTestEvent = new SelectTestEvent('123456789');
+        		dispatchEvent(eventObj);
+				Alert.show('changeHandler_end');
+        	}
+		]]>
+	</mx:Script>
+	
+	<mx:DataGrid xmlns:mx="http://www.adobe.com/2006/mxml" change="changeHandler(event)" width="100%" height="100%" rowCount="5" dataProvider="{logService.lastResult.tests.test}"> 
+	    <mx:columns>
+			<mx:DataGridColumn dataField="id" headerText="ID"/>
+            <mx:DataGridColumn dataField="status" headerText="Status"/>
+			<mx:DataGridColumn dataField="application" headerText="Application"/>
+            <mx:DataGridColumn dataField="counters" headerText="Count (S:F:E)"/>
+        </mx:columns>
+    </mx:DataGrid>
+</mx:Panel>

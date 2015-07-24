@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" xmlns="*"  creationComplete="init()" horizontalAlign="center" verticalAlign="middle" layout="absolute" width="100%" height="100%" backgroundColor="white">
+
+	
+	<mx:Script>
+    	<![CDATA[
+		
+		import mx.controls.Alert;
+		import mx.rpc.events.ResultEvent;
+		import mx.rpc.events.FaultEvent;
+		import mx.rpc.events.InvokeEvent;
+		import mx.utils.ArrayUtil;
+		
+		import net.sourceforge.cfunitReport.models.Test;
+		import net.sourceforge.cfunitReport.models.SelectTestEvent;
+		
+		[Embed(source="cfunit_descriptor.gif")]
+		[Bindable] public var imgCls:Class;
+		[Bindable] public var test:Test;
+		
+		private function init():void {
+			logService.send();
+		}
+		
+       public function setTest(event:SelectTestEvent):void {
+			Alert.show('Click');
+		}
+        
+		
+		]]>
+	</mx:Script>
+	
+	<mx:HTTPService id="logService" url="LogProxy.cfc" useProxy="false" showBusyCursor="true" method="POST">
+		<mx:request>
+			<method>getTests</method>
+		</mx:request>
+	</mx:HTTPService>
+	<mx:Image id="myImageRaw" source="{imgCls}" right="0" top="0" alpha="0.7" />
+	
+	<mx:VBox width="100%" height="100%">
+		<mx:Label text="CFUnit Reporter 0.3a" fontSize="10" />
+		
+		<mx:HBox width="100%" height="100%">
+			<HistoryPanel  width="40%" height="100%" logService="{logService}" testChanged="setTest(event)" />
+			<DetailsPanel width="60%" height="100%" test="{test}" />
+		</mx:HBox>
+	</mx:VBox>
+	
+</mx:Application>
